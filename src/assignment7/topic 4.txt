@@ -1,0 +1,36 @@
+1. select title from Movie where director like 'Steven Spielberg';
+
+2. select distinct Movie.year
+from Movie, Rating
+where Movie.mID = Rating.mID and Rating.stars>=4 order by Movie.year;
+
+3. select title
+from Movie
+where not exists (select * from Rating where Movie.mID = Rating.mID);
+
+4. select Reviewer.name
+from Reviewer, Rating
+where Reviewer.rID = Rating.rID and Rating.ratingDate is NULL;
+
+5. select Reviewer.name, Movie.title, Rating.stars, Rating.ratingDate
+from Movie, Reviewer, Rating
+where Movie.mID = Rating.mID and Rating.rID = Reviewer.rID
+order by Reviewer.name, Movie.title, Rating.stars;
+
+6. select Reviewer.name, Movie.title
+from Reviewer, Movie, Rating A, Rating B
+where A.rID = B.rID and A.mID = B.mID and A.stars < B.stars and A.ratingDate < B.RatingDate and Movie.mID = B.mID and Reviewer.rID = B.rID;
+
+7. select distinct title, stars
+from Movie, Rating
+where stars = (select MAX(stars) from Rating i where i.mID = Rating.mID) and Rating.mID = Movie.mID order by title;
+
+8. select title, avg(stars) as ave
+from Movie, Rating
+where Rating.mID = Movie.mID
+group by Rating.mID
+order by ave desc, title;
+
+9. select name
+from Reviewer
+where rID in (select rID from Rating group by rID having count(rID) >=3);
